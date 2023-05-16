@@ -1,0 +1,23 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+
+.wp-block-soivigol-soivigol-notes {
+	background-color: #EBF563;
+	color: black;
+	padding: 1rem 2rem;
+	overflow: hidden;
+	&::after {
+		content: "";
+		display: block;
+		width: 2rem;
+		height: 2rem;
+		position: absolute;
+		background-color: #a5ae2a;
+		top: -0.5rem;
+		right: -1rem;
+		transform: rotate(117deg);
+	}
+}

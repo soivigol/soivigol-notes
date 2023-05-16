@@ -1,0 +1,27 @@
+.container-work-flow {
+	position: fixed;
+    top: 65px;
+    left: 0;
+    padding: 1rem;
+    background: white;
+    width: 20vw;
+    border-right: 1px solid var( --lt-color-gray-500 );
+    height: calc( 100% - 60px - 25px );
+	transform: translateX( -20vw );
+	transition: all ease-in-out .3s;
+	&.open {
+		transform: translateX(0);
+	}
+
+}
+
+.soivigol-work-flow {
+	svg {
+		max-height: 24px;
+		max-width: 24px
+	}
+}
+
+.ql-editor {
+	min-height: 400px;
+}

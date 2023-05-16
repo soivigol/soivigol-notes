@@ -1,0 +1,22 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2,
+	"name": "soivigol/soivigol-notes",
+	"version": "0.1.0",
+	"title": "Soivigol Notes",
+	"category": "soivigol-cats",
+	"icon": "smiley",
+	"description": "Example block scaffolded with Create Block tool.",
+	"supports": {
+		"html": false
+	},
+	"attributes": {
+		"note":{
+			"type":"string"
+		}
+	},
+	"textdomain": "soivigol-notes",
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css"
+}

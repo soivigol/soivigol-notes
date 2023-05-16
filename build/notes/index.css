@@ -1,0 +1,27 @@
+/*!**********************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/notes/editor.scss ***!
+  \**********************************************************************************************************************************************************************************************************************************************/
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+.wp-block-soivigol-soivigol-notes {
+  background-color: #EBF563;
+  color: black;
+  padding: 1rem 2rem;
+  overflow: hidden;
+}
+.wp-block-soivigol-soivigol-notes::after {
+  content: "";
+  display: block;
+  width: 2rem;
+  height: 2rem;
+  position: absolute;
+  background-color: #a5ae2a;
+  top: -0.5rem;
+  right: -1rem;
+  transform: rotate(117deg);
+}
+
+/*# sourceMappingURL=index.css.map*/

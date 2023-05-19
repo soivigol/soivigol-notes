@@ -13,6 +13,9 @@
  * @package           create-block
  */
 
+define( 'SOIVIGOL_VERSION', '1.0' );
+
+include_once plugin_dir_path( __FILE__ ) . 'admin/admin.php';
 /**
  * Registers the block using the metadata loaded from the `block.json` file.
  * Behind the scenes, it registers also all assets so they can be enqueued
@@ -23,6 +26,8 @@
 function soivigol_notes_block_init() {
 	register_block_type( __DIR__ . '/build/notes' );
 	register_block_type( __DIR__ . '/build/flow' );
+
+	add_action( 'admin_footer', 'soivigol_nonce_in_blocks' );
 
 	register_post_meta( '', 'soivigol_work_flow_content', array(
 		'show_in_rest' => true,
@@ -37,6 +42,16 @@ function soivigol_notes_block_init() {
 	) );
 }
 add_action( 'init', 'soivigol_notes_block_init' );
+
+/**
+ * Add custom nonce in footer when bloks are register
+ */
+function soivigol_nonce_in_blocks() {
+	$nonce = wp_create_nonce( 'wp_rest' );
+	?>
+	<script>var backVariablesNonce = "<?php echo esc_html( $nonce ); ?>";</script>
+	<?php
+}
 
 /**
  * Regiter the blocks category called Soivigol Blocks to grouped my blocks.

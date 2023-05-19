@@ -948,12 +948,26 @@
   border: 1px solid #ccc;
 }
 
+/*!*************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/flow/check-list.scss ***!
+  \*************************************************************************************************************************************************************************************************************************************************/
+.check-list-form {
+  padding-top: 0.5rem;
+}
+.check-list-form button {
+  padding: 0.3rem 0.7rem;
+  background-color: #007cba;
+  border-color: #007cba;
+  border-style: solid;
+  color: white;
+  border-radius: 3px;
+}
 /*!*********************************************************************************************************************************************************************************************************************************************!*\
   !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/flow/editor.scss ***!
   \*********************************************************************************************************************************************************************************************************************************************/
 .container-work-flow {
   position: fixed;
-  top: 65px;
+  top: 60px;
   left: 0;
   padding: 1rem;
   background: white;
@@ -974,6 +988,26 @@
 
 .ql-editor {
   min-height: 400px;
+  margin-bottom: 0.5rem;
+}
+
+.check-list-item {
+  padding-bottom: 0.5rem;
+  padding-top: 0.5rem;
+  position: relative;
+  border-bottom: 1px solid lightgray;
+}
+.check-list-item .dashicons-move {
+  margin-right: 0.3rem;
+}
+.check-list-item .soivigol-btn-remove {
+  position: absolute;
+  right: 0;
+}
+
+.text-big {
+  font-size: 1.2rem;
+  font-weight: 700;
 }
 
 /*# sourceMappingURL=index.css.map*/

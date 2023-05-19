@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 
 import { __ } from '@wordpress/i18n';
 
+import apiFetch from '@wordpress/api-fetch';
+
 import {
 	useSelect,
 	useDispatch,
@@ -11,8 +13,24 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import CheckList from './check-list';
 
-const FlowWorkElement = () => {
+const WorkFlowElement = () => {
 	const [workFlow, setWorkFlow] = useState('');
+
+	const [ loading, setLoading ] = useState( false )
+
+	const getDefaultCheckList = () => {
+		apiFetch.use( apiFetch.createNonceMiddleware( backVariablesNonce ) );
+		// Get posts data to this category
+		apiFetch( {
+			path: '/soivigol/v2/get-workflow-options',
+			method: 'GET',
+		} ).then( ( res ) => {
+			if ( res.soivigol_checklist_array ) {
+				setItems( res.soivigol_checklist_array )
+				setLoading( true )
+			}
+		} )
+	}
 
 	// param to save the data in current post.
     const { editPost } = useDispatch('core/editor');
@@ -45,12 +63,14 @@ const FlowWorkElement = () => {
 		)[ 'soivigol_checklist_content' ];
 		if ( data ) {
 			setItems( JSON.parse( data ) )
+			setLoading( true )
+		} else {
+			getDefaultCheckList()
 		}
 	}, [] );
 
 	// Save data.
 	const onChangeChecklist= ( content ) => {
-		setItems( content )
 		editPost( {
 			meta: { soivigol_checklist_content: JSON.stringify( content ) },
 		} );
@@ -58,10 +78,11 @@ const FlowWorkElement = () => {
 
 	return(
 		<>
-			<CheckList items={ items } setItems={ onChangeChecklist }/>
-			<p>{ __( 'Add aditional notes to this post', 'soivigol-notes' )}</p>
+		 	<p className='text-big'>Checklist</p>
+			<CheckList items={ items } setItems={ onChangeChecklist } loading={loading}/>
+			<p className='text-big'>{ __( 'Add aditional notes to this post', 'soivigol-notes' )}</p>
 			<ReactQuill theme="snow" value={workFlow} onChange={saveWorkFlowMeta} />
 		</>
 	)
 }
-export { FlowWorkElement }
+export { WorkFlowElement }

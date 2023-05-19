@@ -1,6 +1,6 @@
 .container-work-flow {
 	position: fixed;
-    top: 65px;
+    top: 60px;
     left: 0;
     padding: 1rem;
     background: white;
@@ -24,4 +24,24 @@
 
 .ql-editor {
 	min-height: 400px;
+	margin-bottom: .5rem;
+}
+
+.check-list-item {
+	padding-bottom: 0.5rem;
+    padding-top: 0.5rem;
+    position: relative;
+    border-bottom: 1px solid lightgray;
+	.dashicons-move {
+		margin-right: .3rem;
+	}
+	.soivigol-btn-remove {
+		position: absolute;
+		right: 0;
+	}
+}
+
+.text-big {
+	font-size: 1.2rem;
+	font-weight: 700;
 }

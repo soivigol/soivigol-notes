@@ -9,9 +9,10 @@ import {
    subscribe
 } from '@wordpress/data';
 
-import { FlowWorkElement } from './work-flow-element';
+import { WorkFlowElement } from './work-flow-element';
 
 import './editor.scss'
+import { WorkFlowAdmin } from './work-flow-admin';
 
 
 /**
@@ -50,7 +51,7 @@ function WorkFlow() {
 				const containerWorkFlow = document.querySelector( '.container-work-flow' );
 				if ( containerWorkFlow ) {
 					ReactDOM.render(
-						<FlowWorkElement/>,
+						<WorkFlowElement/>,
 						containerWorkFlow
 					)
 				}
@@ -69,3 +70,13 @@ function WorkFlow() {
 registerPlugin( 'soivigol-work-flow', {
    render: WorkFlow,
 } );
+
+window.addEventListener( 'load', () => {
+	const workFlow = document.getElementById('soivigol-check-list');
+	if ( workFlow ) {
+		ReactDOM.render(
+			<WorkFlowAdmin/>,
+			workFlow
+		)
+	}
+});

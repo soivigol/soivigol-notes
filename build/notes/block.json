@@ -5,13 +5,15 @@
   "version": "0.1.0",
   "title": "Soivigol Notes",
   "category": "soivigol-cats",
-  "icon": "smiley",
   "description": "Example block scaffolded with Create Block tool.",
   "supports": {
     "html": false
   },
   "attributes": {
     "note": {
+      "type": "string"
+    },
+    "noteList": {
       "type": "string"
     }
   },

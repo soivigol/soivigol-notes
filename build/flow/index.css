@@ -971,14 +971,21 @@
   left: 0;
   padding: 1rem;
   background: white;
-  width: 20vw;
+  width: 25vw;
   border-right: 1px solid var(--lt-color-gray-500);
   height: calc(100% - 60px - 25px);
-  transform: translateX(-20vw);
+  transform: translateX(-30vw);
   transition: all ease-in-out 0.3s;
+  overflow-y: auto;
+  z-index: 99999999999999;
 }
 .container-work-flow.open {
   transform: translateX(0);
+}
+
+.components-button.has-icon.soivigol-work {
+  background-color: var(--wp-admin-theme-color);
+  color: var(--wp--preset--color--white);
 }
 
 .soivigol-work-flow svg {

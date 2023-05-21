@@ -28,6 +28,7 @@ function soivigol_render_admin_html_workflow() {
 			max-width: 90%;
 			background-color: white;
 			padding: 1rem;
+			margin-top: 2rem;
 		}
 		.quill {
 			margin-bottom: 1rem;
@@ -102,8 +103,10 @@ add_action( 'rest_api_init', 'soivigol_api_calls_from_workflow' );
  */
 function soivigol_get_workflow_options() {
 	$out = array();
-	$out['soivigol_checklist_array'] = get_option( 'soivigol_checklist_array_default' );
-	$out['soivigol_workflow_text']   = get_option( 'soivigol_workflow_text_default' );
+	$out['soivigol_checklist_array']      = get_option( 'soivigol_checklist_array_default' );
+	$out['soivigol_workflow_text']        = get_option( 'soivigol_workflow_text_default' );
+	$out['soivigol_allow_edit_checklist'] = get_option( 'soivigol_allow_edit_checklist_default', '1' );
+	$out['soivigol_show_quill_editor']    = get_option( 'soivigol_show_quill_editor_default', '1' );
 	wp_send_json( $out );
 }
 
@@ -115,9 +118,10 @@ function soivigol_get_workflow_options() {
 function soivigol_set_workflow_options( WP_REST_Request $request ) {
 	$data = $request['data'];
 
-	update_option( 'soivigol_checklist_array_default', $data['soivigol_checklist_array'] );
-
-	update_option( 'soivigol_workflow_text_default', $data['soivigol_workflow_text'] );
+	update_option( 'soivigol_checklist_array_default', $data['soivigol_checklist_array'], false );
+	update_option( 'soivigol_workflow_text_default', $data['soivigol_workflow_text'], false );
+	update_option( 'soivigol_allow_edit_checklist_default', $data['soivigol_allow_edit_checklist'], false );
+	update_option( 'soivigol_show_quill_editor_default', $data['soivigol_show_quill_editor'], false );
 
 	$out = array( 'response' => 'OK' );
 	wp_send_json( $out );

@@ -41,7 +41,7 @@ function soivigol_notes_block_init() {
 		'type' => 'string',
 	) );
 }
-add_action( 'init', 'soivigol_notes_block_init' );
+add_action( 'init', 'soivigol_notes_block_init', 8 );
 
 /**
  * Add custom nonce in footer when bloks are register

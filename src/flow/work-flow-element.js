@@ -14,9 +14,18 @@ import 'react-quill/dist/quill.snow.css';
 import CheckList from './check-list';
 
 const WorkFlowElement = () => {
-	const [workFlow, setWorkFlow] = useState('');
+	const [ workFlow, setWorkFlow ] = useState('');
 
 	const [ loading, setLoading ] = useState( false )
+
+	// Variables to driven the CheckList data.
+	const [ items, setItems] = useState([])
+
+	const [ generalNotes, setGeneralNotes ] = useState(null);
+
+	const [ allowEditCheckbox, setAllowEditCheckbox ] = useState( '1' )
+
+	const [ showEditorCheckbox, setShowEditorCheckbox ] = useState( '1' )
 
 	const getDefaultCheckList = () => {
 		apiFetch.use( apiFetch.createNonceMiddleware( backVariablesNonce ) );
@@ -54,10 +63,9 @@ const WorkFlowElement = () => {
 		setWorkFlow( workFlowMeta )
 	},[])
 
-	// Variables to driven the CheckList data.
-	const [ items, setItems] = useState([])
-	// Get the meta data to current post to Check List array
+	// Get the meta data
 	useSelect( function ( select ) {
+		// Get the meta data to current post to Check List array
 		const data = select( 'core/editor' ).getEditedPostAttribute(
 			'meta'
 		)[ 'soivigol_checklist_content' ];
@@ -69,6 +77,19 @@ const WorkFlowElement = () => {
 		}
 	}, [] );
 
+	useEffect( () =>{
+		apiFetch.use( apiFetch.createNonceMiddleware( backVariablesNonce ) );
+		// Get posts data to this category
+		apiFetch( {
+			path: '/soivigol/v2/get-workflow-options',
+			method: 'GET',
+		} ).then( ( res ) => {
+			setGeneralNotes( res.soivigol_workflow_text )
+			setAllowEditCheckbox( res.soivigol_allow_edit_checklist )
+			setShowEditorCheckbox( res.soivigol_show_quill_editor )
+		} )
+	}, [])
+
 	// Save data.
 	const onChangeChecklist= ( content ) => {
 		editPost( {
@@ -79,9 +100,24 @@ const WorkFlowElement = () => {
 	return(
 		<>
 		 	<p className='text-big'>Checklist</p>
-			<CheckList items={ items } setItems={ onChangeChecklist } loading={loading}/>
-			<p className='text-big'>{ __( 'Add aditional notes to this post', 'soivigol-notes' )}</p>
-			<ReactQuill theme="snow" value={workFlow} onChange={saveWorkFlowMeta} />
+			<CheckList items={ items } setItems={ onChangeChecklist } loading={loading} edit={ '1' === allowEditCheckbox ? true : false }/>
+			{
+				generalNotes && (
+					<>
+					<p className='text-big'>{ __( 'General Notes', 'soivigol-notes' )}</p>
+					<div dangerouslySetInnerHTML={{ __html: generalNotes }} />
+					</>
+				)
+			}
+			{
+				'1' === showEditorCheckbox && (
+					<>
+					<p className='text-big'>{ __( 'Aditional notes', 'soivigol-notes' )}</p>
+					<p>{ __( 'Add aditional notes to this post', 'soivigol-notes' )}</p>
+					<ReactQuill theme="snow" value={ workFlow } onChange={saveWorkFlowMeta} />
+					</>
+				)
+			}
 		</>
 	)
 }

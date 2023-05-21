@@ -48,10 +48,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var react_easy_sort__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-easy-sort */ "./node_modules/react-easy-sort/index.module.js");
+/* harmony import */ var react_easy_sort__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-easy-sort */ "./node_modules/react-easy-sort/index.module.js");
 /* harmony import */ var array_move__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! array-move */ "./node_modules/array-move/index.js");
 /* harmony import */ var array_move__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(array_move__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _check_list_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./check-list.scss */ "./src/flow/check-list.scss");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _check_list_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./check-list.scss */ "./src/flow/check-list.scss");
+
 
 
 
@@ -65,13 +68,13 @@ function Checklist(props) {
   const {
     items,
     setItems,
-    loading = true
+    loading = true,
+    edit = true
   } = props;
   const [newItem, setNewItem] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)('');
   const [newValue, setNewValue] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]);
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
     if (items.toString() !== newValue.toString()) {
-      console.log(items);
       setNewValue(items);
     }
   }, [loading]);
@@ -107,13 +110,13 @@ function Checklist(props) {
     const newArray = array => array_move__WEBPACK_IMPORTED_MODULE_2___default()(array, oldIndex, newIndex);
     setNewValue(newArray);
   };
-  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_easy_sort__WEBPACK_IMPORTED_MODULE_4__["default"], {
+  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, edit ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_easy_sort__WEBPACK_IMPORTED_MODULE_5__["default"], {
     onSortEnd: handleOnSortEnd
-  }, newValue.map((item, index) => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_easy_sort__WEBPACK_IMPORTED_MODULE_4__.SortableItem, {
+  }, newValue.map((item, index) => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_easy_sort__WEBPACK_IMPORTED_MODULE_5__.SortableItem, {
     key: index
   }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
     className: "check-list-item"
-  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_easy_sort__WEBPACK_IMPORTED_MODULE_4__.SortableKnob, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(react_easy_sort__WEBPACK_IMPORTED_MODULE_5__.SortableKnob, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
     class: "dashicons dashicons-move"
   })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
     type: "checkbox",
@@ -130,7 +133,13 @@ function Checklist(props) {
     onChange: handleInputChange
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     onClick: handleAddItem
-  }, "Add")));
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Add', 'soivigol-notes')))) : (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, newValue.map((item, index) => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    className: "check-list-item"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    type: "checkbox",
+    checked: item.completed,
+    onChange: () => handleToggleComplete(index)
+  }), item.text))));
 }
 ;
 
@@ -174,6 +183,8 @@ const WorkFlowAdmin = () => {
   const [items, setItems] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]);
   const [loading, setLoading] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
   const [notice, setNotice] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)('');
+  const [allowEditCheckbox, setAllowEditCheckbox] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)('1');
+  const [showEditorCheckbox, setShowEditorCheckbox] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)('1');
   (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
     _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_3___default().use(_wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_3___default().createNonceMiddleware(window.backVariables.nonce));
     // Get posts data to this category
@@ -181,52 +192,80 @@ const WorkFlowAdmin = () => {
       path: '/soivigol/v2/get-workflow-options',
       method: 'GET'
     }).then(res => {
+      console.log(res);
       if (res.soivigol_checklist_array) {
         setItems(res.soivigol_checklist_array);
         setLoading(true);
       }
       setWorkFlow(res.soivigol_workflow_text);
+      setAllowEditCheckbox(res.soivigol_allow_edit_checklist);
+      setShowEditorCheckbox(res.soivigol_show_quill_editor);
     });
   }, []);
   const onSaveData = () => {
-    setNotice((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Sending...', 'soivigol-notes'));
+    setNotice('sending');
     _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_3___default()({
       path: '/soivigol/v2/save-workflow-options',
       method: 'POST',
       data: {
         data: {
           soivigol_checklist_array: items,
-          soivigol_workflow_text: workFlow
+          soivigol_workflow_text: workFlow,
+          soivigol_allow_edit_checklist: allowEditCheckbox,
+          soivigol_show_quill_editor: showEditorCheckbox
         }
       }
     }).then(res => {
       console.log(res);
       if ('OK' === res.response) {
-        setNotice((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Saved', 'soivigol-notes'));
+        setNotice('send');
         setTimeout(() => {
           setNotice('');
         }, 3000);
       }
     });
   };
+  const onChangeCheckbox = e => {
+    if ('allow-edit-checklist' === e.target.name) {
+      const currentAllow = allowEditCheckbox;
+      '0' === currentAllow ? setAllowEditCheckbox('1') : setAllowEditCheckbox('0');
+    } else {
+      const currentEdit = showEditorCheckbox;
+      '0' === currentEdit ? setShowEditorCheckbox('1') : setShowEditorCheckbox('0');
+    }
+  };
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     className: "text-big"
-  }, "Checklist/Work Flow by default loaded in all sites."), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_check_list__WEBPACK_IMPORTED_MODULE_6__["default"], {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Checklist/Work Flow', 'soivigol-notes')), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Check list/Work flow created by default loaded in all sites. Once loaded, it\'s saved in each post with the content that it have in this moment.', 'soivigol-notes')), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_check_list__WEBPACK_IMPORTED_MODULE_6__["default"], {
     items: items,
     setItems: setItems,
     loading: loading
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     className: "text-big"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('General text that will be inserted in all Check List/Work Flows', 'soivigol-notes')), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)((react_quill__WEBPACK_IMPORTED_MODULE_4___default()), {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('General notes', 'soivigol-notes')), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('General text that will be inserted in all Check List/Work Flows', 'soivigol-notes')), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)((react_quill__WEBPACK_IMPORTED_MODULE_4___default()), {
     theme: "snow",
     value: workFlow,
     onChange: setWorkFlow
-  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    type: "checkbox",
+    name: "allow-edit-checklist",
+    onChange: onChangeCheckbox,
+    checked: '1' === allowEditCheckbox ? 'checked' : '',
+    value: allowEditCheckbox
+  }), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Allow edit checklist/work flow in the editor sidebar? If you active this option, you will allow that in the post can move, remove and add items.', 'soivigol-notes'))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
+    type: "checkbox",
+    name: "show-quill-editor",
+    onChange: onChangeCheckbox,
+    checked: '1' === showEditorCheckbox ? 'checked' : '',
+    value: showEditorCheckbox
+  }), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Show the rich text editor in the sidebar?', 'soivigol-notes'))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("button", {
     onClick: onSaveData,
     className: "button button-primary"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Save', 'soivigol-notes')), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-    className: "soivigol-notice"
-  }, notice));
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Save', 'soivigol-notes'))), 'sending' === notice ? (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    class: "notice notice-warning"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Sending...', 'soivigol-notes'))) : notice && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    class: "notice notice-success"
+  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Saved', 'soivigol-notes'))));
 };
 
 
@@ -268,6 +307,12 @@ __webpack_require__.r(__webpack_exports__);
 const WorkFlowElement = () => {
   const [workFlow, setWorkFlow] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)('');
   const [loading, setLoading] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
+
+  // Variables to driven the CheckList data.
+  const [items, setItems] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]);
+  const [generalNotes, setGeneralNotes] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
+  const [allowEditCheckbox, setAllowEditCheckbox] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)('1');
+  const [showEditorCheckbox, setShowEditorCheckbox] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)('1');
   const getDefaultCheckList = () => {
     _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_3___default().use(_wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_3___default().createNonceMiddleware(backVariablesNonce));
     // Get posts data to this category
@@ -308,10 +353,9 @@ const WorkFlowElement = () => {
     setWorkFlow(workFlowMeta);
   }, []);
 
-  // Variables to driven the CheckList data.
-  const [items, setItems] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([]);
-  // Get the meta data to current post to Check List array
+  // Get the meta data
   (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_4__.useSelect)(function (select) {
+    // Get the meta data to current post to Check List array
     const data = select('core/editor').getEditedPostAttribute('meta')['soivigol_checklist_content'];
     if (data) {
       setItems(JSON.parse(data));
@@ -319,6 +363,18 @@ const WorkFlowElement = () => {
     } else {
       getDefaultCheckList();
     }
+  }, []);
+  (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+    _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_3___default().use(_wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_3___default().createNonceMiddleware(backVariablesNonce));
+    // Get posts data to this category
+    _wordpress_api_fetch__WEBPACK_IMPORTED_MODULE_3___default()({
+      path: '/soivigol/v2/get-workflow-options',
+      method: 'GET'
+    }).then(res => {
+      setGeneralNotes(res.soivigol_workflow_text);
+      setAllowEditCheckbox(res.soivigol_allow_edit_checklist);
+      setShowEditorCheckbox(res.soivigol_show_quill_editor);
+    });
   }, []);
 
   // Save data.
@@ -334,14 +390,21 @@ const WorkFlowElement = () => {
   }, "Checklist"), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_check_list__WEBPACK_IMPORTED_MODULE_7__["default"], {
     items: items,
     setItems: onChangeChecklist,
-    loading: loading
-  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    loading: loading,
+    edit: '1' === allowEditCheckbox ? true : false
+  }), generalNotes && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     className: "text-big"
-  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Add aditional notes to this post', 'soivigol-notes')), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)((react_quill__WEBPACK_IMPORTED_MODULE_5___default()), {
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('General Notes', 'soivigol-notes')), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
+    dangerouslySetInnerHTML: {
+      __html: generalNotes
+    }
+  })), '1' === showEditorCheckbox && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
+    className: "text-big"
+  }, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Aditional notes', 'soivigol-notes')), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__)('Add aditional notes to this post', 'soivigol-notes')), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)((react_quill__WEBPACK_IMPORTED_MODULE_5___default()), {
     theme: "snow",
     value: workFlow,
     onChange: saveWorkFlowMeta
-  }));
+  })));
 };
 
 
@@ -16697,13 +16760,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-dom */ "react-dom");
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(react_dom__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var _wordpress_plugins__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/plugins */ "@wordpress/plugins");
-/* harmony import */ var _wordpress_plugins__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_plugins__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
-/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_4__);
-/* harmony import */ var _work_flow_element__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./work-flow-element */ "./src/flow/work-flow-element.js");
-/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./editor.scss */ "./src/flow/editor.scss");
-/* harmony import */ var _work_flow_admin__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./work-flow-admin */ "./src/flow/work-flow-admin.js");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _wordpress_plugins__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/plugins */ "@wordpress/plugins");
+/* harmony import */ var _wordpress_plugins__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_plugins__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
+/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_5__);
+/* harmony import */ var _work_flow_element__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./work-flow-element */ "./src/flow/work-flow-element.js");
+/* harmony import */ var _editor_scss__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./editor.scss */ "./src/flow/editor.scss");
+/* harmony import */ var _work_flow_admin__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./work-flow-admin */ "./src/flow/work-flow-admin.js");
+
 
 
 
@@ -16729,44 +16795,71 @@ function WorkFlow() {
     btnOpenFlow.classList.add('components-button');
     btnOpenFlow.classList.add('has-icon');
     btnOpenFlow.classList.add('soivigol-work');
-    btnOpenFlow.setAttribute('aria-label', 'Más campos');
-    btnOpenFlow.title = 'Campos';
-    btnOpenFlow.innerHTML = `<svg id="Capa_1" enable-background="new 0 0 512.003 512.003" height="512" viewBox="0 0 512.003 512.003" width="512" xmlns="http://www.w3.org/2000/svg"><g><g><g><path d="m392.775 5.457h77.552v149.999h-77.552z" transform="matrix(.707 -.707 .707 .707 69.507 328.717)"/><path d="m96.566 318.029-40.095 137.509 137.507-40.096z"/><path d="m121.66 162.306h306.085v149.999h-306.085z" transform="matrix(.707 -.707 .707 .707 -87.342 263.749)"/></g><g><path d="m0 481.998h512v30h-512z"/></g></g></g></svg>`;
-    const flow = document.createElement('div');
-    flow.classList.add('container-work-flow');
+    btnOpenFlow.setAttribute('aria-label', (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Work Flow/Checklist', 'soivigol-notes'));
+    btnOpenFlow.title = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Work Flow/Checklist', 'soivigol-notes');
+    btnOpenFlow.innerHTML = `<span class="dashicons dashicons-editor-ul"></span>`;
     const container = document.querySelector('.soivigol-work-flow');
     container.insertAdjacentElement('beforeend', btnOpenFlow);
-    container.insertAdjacentElement('beforeend', flow);
   };
-  (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_4__.subscribe)(() => {
+  const renderWorkFlow = selector => {
+    const flow = document.createElement('div');
+    flow.classList.add('container-work-flow');
+    selector.insertAdjacentElement('beforeend', flow);
+  };
+  const hasEventListener = (element, eventType) => {
+    return typeof element[`on${eventType}`] === 'function';
+  };
+  (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_5__.subscribe)(() => {
     const editToolbar = document.querySelector('.edit-post-header-toolbar');
     if (!editToolbar) {
       return;
     }
     if (!document.querySelector('.soivigol-work-flow')) {
       renderButton(editToolbar);
+    }
+  });
+  (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_5__.subscribe)(() => {
+    const bodyEditor = document.querySelector('.interface-interface-skeleton__body');
+    if (!bodyEditor) {
+      return;
+    }
+    if (!document.querySelector('.container-work-flow')) {
+      renderWorkFlow(bodyEditor);
       const containerWorkFlow = document.querySelector('.container-work-flow');
       if (containerWorkFlow) {
-        react_dom__WEBPACK_IMPORTED_MODULE_2___default().render((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_work_flow_element__WEBPACK_IMPORTED_MODULE_5__.WorkFlowElement, null), containerWorkFlow);
-      }
-      const btnOpenWorkFlow = document.querySelector('button.soivigol-work');
-      if (btnOpenWorkFlow && containerWorkFlow) {
-        btnOpenWorkFlow.addEventListener('click', () => {
-          containerWorkFlow.classList.toggle('open');
-        });
+        react_dom__WEBPACK_IMPORTED_MODULE_2___default().render((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_work_flow_element__WEBPACK_IMPORTED_MODULE_6__.WorkFlowElement, null), containerWorkFlow);
       }
     }
   });
   return null;
 }
-(0,_wordpress_plugins__WEBPACK_IMPORTED_MODULE_3__.registerPlugin)('soivigol-work-flow', {
+(0,_wordpress_plugins__WEBPACK_IMPORTED_MODULE_4__.registerPlugin)('soivigol-work-flow', {
   render: WorkFlow
 });
 window.addEventListener('load', () => {
   const workFlow = document.getElementById('soivigol-check-list');
   if (workFlow) {
-    react_dom__WEBPACK_IMPORTED_MODULE_2___default().render((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_work_flow_admin__WEBPACK_IMPORTED_MODULE_7__.WorkFlowAdmin, null), workFlow);
+    react_dom__WEBPACK_IMPORTED_MODULE_2___default().render((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_work_flow_admin__WEBPACK_IMPORTED_MODULE_8__.WorkFlowAdmin, null), workFlow);
   }
+  // Event to open and close the workflow container
+  let inteval = setInterval(() => {
+    const containerWorkFlow = document.querySelector('.container-work-flow');
+    const btnOpenWorkFlow = document.querySelector('button.soivigol-work');
+    if (btnOpenWorkFlow && containerWorkFlow) {
+      clearInterval(inteval);
+      btnOpenWorkFlow.addEventListener('click', () => {
+        const btnOpen = '<span class="dashicons dashicons-editor-ul"></span>';
+        const btnClose = '<span class="dashicons dashicons-no"></span>';
+        if (containerWorkFlow.classList.contains('open')) {
+          containerWorkFlow.classList.remove('open');
+          btnOpenWorkFlow.innerHTML = btnOpen;
+        } else {
+          containerWorkFlow.classList.add('open');
+          btnOpenWorkFlow.innerHTML = btnClose;
+        }
+      });
+    }
+  }, 100);
 });
 })();
 

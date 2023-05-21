@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import { __ } from '@wordpress/i18n';
+
 /**
  * WordPress dependencies
  */
@@ -29,17 +31,23 @@ function WorkFlow() {
 			btnOpenFlow.classList.add( 'components-button' )
 			btnOpenFlow.classList.add( 'has-icon' )
 			btnOpenFlow.classList.add( 'soivigol-work' )
-			btnOpenFlow.setAttribute( 'aria-label', 'Más campos' )
-			btnOpenFlow.title = 'Campos'
-			btnOpenFlow.innerHTML = `<svg id="Capa_1" enable-background="new 0 0 512.003 512.003" height="512" viewBox="0 0 512.003 512.003" width="512" xmlns="http://www.w3.org/2000/svg"><g><g><g><path d="m392.775 5.457h77.552v149.999h-77.552z" transform="matrix(.707 -.707 .707 .707 69.507 328.717)"/><path d="m96.566 318.029-40.095 137.509 137.507-40.096z"/><path d="m121.66 162.306h306.085v149.999h-306.085z" transform="matrix(.707 -.707 .707 .707 -87.342 263.749)"/></g><g><path d="m0 481.998h512v30h-512z"/></g></g></g></svg>`;
-
-			const flow = document.createElement( 'div' )
-			flow.classList.add( 'container-work-flow' )
+			btnOpenFlow.setAttribute( 'aria-label', __( 'Work Flow/Checklist', 'soivigol-notes' ) )
+			btnOpenFlow.title = __( 'Work Flow/Checklist', 'soivigol-notes' )
+			btnOpenFlow.innerHTML = `<span class="dashicons dashicons-editor-ul"></span>`;
 
 			const container = document.querySelector( '.soivigol-work-flow' )
 			container.insertAdjacentElement( 'beforeend', btnOpenFlow )
-			container.insertAdjacentElement( 'beforeend', flow )
 	   }
+
+	   const renderWorkFlow = ( selector ) => {
+			const flow = document.createElement( 'div' )
+			flow.classList.add( 'container-work-flow' )
+			selector.insertAdjacentElement( 'beforeend', flow )
+	   }
+
+	  	const hasEventListener = (element, eventType) => {
+			return typeof element[`on${eventType}`] === 'function';
+		};
 
 	   	subscribe( () => {
 			const editToolbar = document.querySelector( '.edit-post-header-toolbar' )
@@ -48,6 +56,16 @@ function WorkFlow() {
 			}
 			if ( ! document.querySelector( '.soivigol-work-flow' ) ) {
 				renderButton( editToolbar );
+			}
+		} );
+
+		subscribe( () => {
+			const bodyEditor = document.querySelector( '.interface-interface-skeleton__body' )
+			if ( ! bodyEditor ) {
+				return
+			}
+			if ( ! document.querySelector( '.container-work-flow' ) ) {
+				renderWorkFlow( bodyEditor );
 				const containerWorkFlow = document.querySelector( '.container-work-flow' );
 				if ( containerWorkFlow ) {
 					ReactDOM.render(
@@ -55,15 +73,8 @@ function WorkFlow() {
 						containerWorkFlow
 					)
 				}
-				const btnOpenWorkFlow = document.querySelector( 'button.soivigol-work' )
-				if ( btnOpenWorkFlow && containerWorkFlow ) {
-					btnOpenWorkFlow.addEventListener( 'click', () => {
-						containerWorkFlow.classList.toggle( 'open' )
-					})
-				}
 			}
 		} );
-
 	   return null;
 }
 
@@ -79,4 +90,24 @@ window.addEventListener( 'load', () => {
 			workFlow
 		)
 	}
+	// Event to open and close the workflow container
+	let inteval = setInterval(() => {
+		const containerWorkFlow = document.querySelector( '.container-work-flow' );
+		const btnOpenWorkFlow = document.querySelector( 'button.soivigol-work' )
+		if ( btnOpenWorkFlow && containerWorkFlow ) {
+			clearInterval( inteval )
+			btnOpenWorkFlow.addEventListener( 'click', () => {
+				const btnOpen = '<span class="dashicons dashicons-editor-ul"></span>';
+				const btnClose = '<span class="dashicons dashicons-no"></span>';
+				if ( containerWorkFlow.classList.contains( 'open' ) ) {
+					containerWorkFlow.classList.remove( 'open' );
+					btnOpenWorkFlow.innerHTML = btnOpen;
+				} else {
+					containerWorkFlow.classList.add( 'open' );
+					btnOpenWorkFlow.innerHTML = btnClose;
+				}
+			});
+		}
+	}, 100);
+
 });

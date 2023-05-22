@@ -35,20 +35,20 @@ export default function Checklist( props ) {
 
   const handleAddItem = () => {
 	if (newItem.trim() !== '') {
-	  setNewValue([...items, { text: newItem, completed: false }]);
+	  setNewValue([...newValue, { text: newItem, completed: false }]);
 	  setNewItem('');
 	}
   };
 
   const handleRemoveItem = (index) => {
-    const updatedItems = [...items];
+    const updatedItems = [...newValue];
     updatedItems.splice(index, 1);
     setNewValue(updatedItems);
   };
 
   const handleToggleComplete = (index) => {
-	const updatedItems = [...items];
-	updatedItems[index].completed = !updatedItems[index].completed;
+	const updatedItems = [...newValue];
+	updatedItems[index].completed = ! updatedItems[index].completed;
 	setNewValue(updatedItems);
   };
 
@@ -89,13 +89,13 @@ export default function Checklist( props ) {
 			</>
 		) : (
 			<div>
-				{newValue.map((item, index) => (
+				{ newValue.map( ( item, index ) => (
 					<div className='check-list-item'>
 						<input
 							type="checkbox"
-							checked={item.completed}
+							checked={ item.completed }
 							id= { `check-list-${ index }` }
-							onChange={() => handleToggleComplete(index)}
+							onChange={() => handleToggleComplete( index ) }
 						/>
 						<label for={ `check-list-${ index }` }>{item.text}</label>
 					</div>

@@ -9,3 +9,13 @@
 		border-radius: 3px;
 	}
 }
+
+.check-list-item {
+	label {
+		font-weight: 700;
+	}
+	input:checked + label {
+		font-weight: 400;
+		text-decoration: line-through;
+	}
+}

@@ -69,12 +69,13 @@ export default function Checklist( props ) {
 					<SortableKnob>
 						<span class="dashicons dashicons-move"></span>
 					</SortableKnob>
-					<input
-						type="checkbox"
-						checked={item.completed}
-						onChange={() => handleToggleComplete(index)}
-					/>
-					{item.text}
+						<input
+							type="checkbox"
+							checked={item.completed}
+							id= { `check-list-${ index }` }
+							onChange={() => handleToggleComplete(index)}
+						/>
+					<label for= { `check-list-${ index }` } >{item.text}</label>
 					<span class="dashicons dashicons-trash soivigol-btn-remove" onClick={() => handleRemoveItem(index)}></span>
 					</div>
 				</SortableItem>
@@ -93,9 +94,10 @@ export default function Checklist( props ) {
 						<input
 							type="checkbox"
 							checked={item.completed}
+							id= { `check-list-${ index }` }
 							onChange={() => handleToggleComplete(index)}
 						/>
-						{item.text}
+						<label for={ `check-list-${ index }` }>{item.text}</label>
 					</div>
 				))}
 			</div>

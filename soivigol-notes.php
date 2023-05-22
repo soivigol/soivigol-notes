@@ -4,7 +4,7 @@
  * Description:       Soivigol Notes provide you a block notes to annotations in the block editor that it don't show in the front end. Also provide a sidebard with a check list or work flow in each post with instructions to follow or step by step to write a post. This sidebar also has a editor rich text for additional annotations.
  * Requires at least: 6.1
  * Requires PHP:      7.0
- * Version:           0.1.1
+ * Version:           1.0.1
  * Author:            David Viña
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
@@ -13,7 +13,7 @@
  * @package           soivigol-notes
  */
 
-define( 'SOIVIGOL_VERSION', '1.0' );
+define( 'SOIVIGOL_VERSION', '1.0.1' );
 
 include_once plugin_dir_path( __FILE__ ) . 'admin/admin.php';
 

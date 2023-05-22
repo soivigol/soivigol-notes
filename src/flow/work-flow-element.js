@@ -23,9 +23,9 @@ const WorkFlowElement = () => {
 
 	const [ generalNotes, setGeneralNotes ] = useState(null);
 
-	const [ allowEditCheckbox, setAllowEditCheckbox ] = useState( '1' )
+	const [ allowEditCheckbox, setAllowEditCheckbox ] = useState( '0' )
 
-	const [ showEditorCheckbox, setShowEditorCheckbox ] = useState( '1' )
+	const [ showEditorCheckbox, setShowEditorCheckbox ] = useState( '0' )
 
 	const getDefaultCheckList = () => {
 		apiFetch.use( apiFetch.createNonceMiddleware( backVariablesNonce ) );

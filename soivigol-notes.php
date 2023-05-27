@@ -15,11 +15,11 @@
  * @package           soivigol-notes
  */
 
-define( 'SOIVIGOL_VERSION', '1.0.1' );
+define( 'SOIN_VERSION', '1.0.1' );
 
 include_once plugin_dir_path( __FILE__ ) . 'admin/admin.php';
 
-function soivigol_plugin_add_settings_link( $links, $file ) {
+function soin_plugin_add_settings_link( $links, $file ) {
     // Check if the current plugin is your plugin
     if ( plugin_basename(__FILE__) === $file ) {
         // Add a custom settings link
@@ -29,7 +29,7 @@ function soivigol_plugin_add_settings_link( $links, $file ) {
 
     return $links;
 }
-add_filter( 'plugin_action_links', 'soivigol_plugin_add_settings_link', 10, 2 );
+add_filter( 'plugin_action_links', 'soin_plugin_add_settings_link', 10, 2 );
 
 /**
  * Registers the block using the metadata loaded from the `block.json` file.
@@ -38,11 +38,11 @@ add_filter( 'plugin_action_links', 'soivigol_plugin_add_settings_link', 10, 2 );
  *
  * @see https://developer.wordpress.org/reference/functions/register_block_type/
  */
-function soivigol_notes_block_init() {
+function soin_notes_block_init() {
 	register_block_type( __DIR__ . '/build/notes' );
 	register_block_type( __DIR__ . '/build/flow' );
 
-	add_action( 'admin_footer', 'soivigol_nonce_in_blocks' );
+	add_action( 'admin_footer', 'soin_nonce_in_blocks' );
 
 	register_post_meta( '', 'soivigol_work_flow_content', array(
 		'show_in_rest' => true,
@@ -56,12 +56,12 @@ function soivigol_notes_block_init() {
 		'type' => 'string',
 	) );
 }
-add_action( 'init', 'soivigol_notes_block_init', 8 );
+add_action( 'init', 'soin_notes_block_init', 8 );
 
 /**
  * Add custom nonce in footer when bloks are register
  */
-function soivigol_nonce_in_blocks() {
+function soin_nonce_in_blocks() {
 	$nonce = wp_create_nonce( 'wp_rest' );
 	?>
 	<script>var backVariablesNonce = "<?php echo esc_html( $nonce ); ?>";</script>
@@ -73,7 +73,7 @@ function soivigol_nonce_in_blocks() {
  *
  * @param string $categories Categorias.
  */
-function soivigol_category_blocks( $categories ) {
+function soin_category_blocks( $categories ) {
 	return array_merge(
 		array(
 			array(
@@ -84,4 +84,4 @@ function soivigol_category_blocks( $categories ) {
 		$categories,
 	);
 }
-add_filter( 'block_categories_all', 'soivigol_category_blocks', 10, 2 );
+add_filter( 'block_categories_all', 'soin_category_blocks', 10, 2 );

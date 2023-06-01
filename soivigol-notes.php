@@ -4,7 +4,7 @@
  * Description:       Soivigol Notes provide you a block notes to annotations in the block editor that it don't show in the front end. Also provide a sidebard with a check list or work flow in each post with instructions to follow or step by step to write a post. This sidebar also has a editor rich text for additional annotations.
  * Requires at least: 6.1
  * Requires PHP:      7.0
- * Version:           1.0.1
+ * Version:           1.0
  * Plugin Uri:        https://sovigol.dev/plugin-soivigol-notes
  * Author:            David Viña
  * Author URI:        https://soivigol.dev
@@ -15,10 +15,18 @@
  * @package           soivigol-notes
  */
 
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 define( 'SOIN_VERSION', '1.0.1' );
 
 include_once plugin_dir_path( __FILE__ ) . 'admin/admin.php';
 
+/**
+ * Add settings link in list of the plugins.
+ *
+ * @param array $links Array with all plugin links.
+ * @param string $file Path to the plugin file relative to the plugins directory.
+ */
 function soin_plugin_add_settings_link( $links, $file ) {
     // Check if the current plugin is your plugin
     if ( plugin_basename(__FILE__) === $file ) {
@@ -71,7 +79,7 @@ function soin_nonce_in_blocks() {
 /**
  * Regiter the blocks category called Soivigol Blocks to grouped my blocks.
  *
- * @param string $categories Categorias.
+ * @param array $categories Array with all categories of blocks.
  */
 function soin_category_blocks( $categories ) {
 	return array_merge(

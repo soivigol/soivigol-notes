@@ -3,6 +3,8 @@
  * File where insert code to dashboard side.
  */
 
+ if ( ! defined( 'ABSPATH' ) ) exit;
+
  /**
  * Add menu into options.
  */
@@ -45,7 +47,7 @@ function soivigol_render_admin_html_workflow() {
 }
 
 /**
- * Fuction que inicia los bloques.
+ * Fuction that enqueue the scripts and estyles to general dashboard of the workflow.
  */
 function soivigol_add_styles_and_scripts_to_workflow() {
 	$current_screen = get_current_screen();

@@ -29,7 +29,7 @@ const WorkFlowAdmin = () => {
 		apiFetch( {
 			path: '/soivigol/v2/get-workflow-options',
 			method: 'GET',
-		} ).then( ( res ) => {console.log( res )
+		} ).then( ( res ) => {
 			if ( res.soivigol_checklist_array ) {
 				setItems( res.soivigol_checklist_array )
 				setLoading( true )
@@ -53,7 +53,6 @@ const WorkFlowAdmin = () => {
 					soivigol_show_quill_editor: showEditorCheckbox,
 				} }
 		} ).then( ( res ) => {
-			console.log( res )
 			if ( 'OK' === res.response ) {
 				setNotice( 'send' )
 				setTimeout( () => {

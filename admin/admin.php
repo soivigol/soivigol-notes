@@ -1,11 +1,15 @@
 <?php
 /**
  * File where insert code to dashboard side.
+ *
+ * @package soivigol-notes
  */
 
- if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
- /**
+/**
  * Add menu into options.
  */
 function soivigol_add_menu_workflow() {
@@ -105,6 +109,7 @@ add_action( 'rest_api_init', 'soivigol_api_calls_from_workflow' );
  */
 function soivigol_get_workflow_options() {
 	$out = array();
+
 	$out['soivigol_checklist_array']      = get_option( 'soivigol_checklist_array_default' );
 	$out['soivigol_workflow_text']        = get_option( 'soivigol_workflow_text_default' );
 	$out['soivigol_allow_edit_checklist'] = get_option( 'soivigol_allow_edit_checklist_default', '1' );

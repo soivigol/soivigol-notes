@@ -15,27 +15,29 @@
  * @package           soivigol-notes
  */
 
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 define( 'SOIN_VERSION', '1.0.1' );
 
-include_once plugin_dir_path( __FILE__ ) . 'admin/admin.php';
+require_once plugin_dir_path( __FILE__ ) . 'admin/admin.php';
 
 /**
  * Add settings link in list of the plugins.
  *
- * @param array $links Array with all plugin links.
+ * @param array  $links Array with all plugin links.
  * @param string $file Path to the plugin file relative to the plugins directory.
  */
 function soin_plugin_add_settings_link( $links, $file ) {
-    // Check if the current plugin is your plugin
-    if ( plugin_basename(__FILE__) === $file ) {
-        // Add a custom settings link
-        $settings_link = '<a href="' . admin_url( 'options-general.php?page=soivigol-workflow' ) . '">' . __( 'Settings', 'soivigol-notes' ) . '</a>';
-        array_unshift( $links, $settings_link );
-    }
+	// Check if the current plugin is your plugin.
+	if ( plugin_basename( __FILE__ ) === $file ) {
+		// Add a custom settings link.
+		$settings_link = '<a href="' . admin_url( 'options-general.php?page=soivigol-workflow' ) . '">' . __( 'Settings', 'soivigol-notes' ) . '</a>';
+		array_unshift( $links, $settings_link );
+	}
 
-    return $links;
+	return $links;
 }
 add_filter( 'plugin_action_links', 'soin_plugin_add_settings_link', 10, 2 );
 
@@ -52,17 +54,25 @@ function soin_notes_block_init() {
 
 	add_action( 'admin_footer', 'soin_nonce_in_blocks' );
 
-	register_post_meta( '', 'soivigol_work_flow_content', array(
-		'show_in_rest' => true,
-		'single' => true,
-		'type' => 'string',
-	) );
+	register_post_meta(
+		'',
+		'soivigol_work_flow_content',
+		array(
+			'show_in_rest' => true,
+			'single'       => true,
+			'type'         => 'string',
+		),
+	);
 
-	register_post_meta( '', 'soivigol_checklist_content', array(
-		'show_in_rest' => true,
-		'single' => true,
-		'type' => 'string',
-	) );
+	register_post_meta(
+		'',
+		'soivigol_checklist_content',
+		array(
+			'show_in_rest' => true,
+			'single'       => true,
+			'type'         => 'string',
+		),
+	);
 }
 add_action( 'init', 'soin_notes_block_init', 8 );
 

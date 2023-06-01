@@ -22,6 +22,7 @@ Soivigol Notes is a plugin that improves the productivity for post writers and p
 The left sidebar on the post and page editor has a checklist of to-do list. You can also create a workflow. This sidebar can have a rich editor to introduce notes you need to remember. You can customize this sidebar from a Settings->Soivigol Check List. Here, you can enter a Checklist or Work flow general that is loaded in the editor. You can allow edit this list or no. Also, in this section, you can enter a general text that appears in the editor, in general. And you can show, or no, the Rich Editor to each particular post/page.
 
 The note’s block is a special block to enter annotations in any position of the post, how a post-it to remember some data or some require setting. This block isn't shown in the front end. Only work in the backend. Many thanks to viajes.chavetas.es for the support, ideas and feedback to create this plugin.
+
 == Installation ==
 
 1. Upload the plugin files to the `/wp-content/plugins/soivigol-notes` directory, or install the plugin through the WordPress plugins screen directly.
@@ -37,5 +38,5 @@ directory take precedence. For example, `/assets/screenshot-1.png` would win ove
 
 == Changelog ==
 
-= 0.1.0 =
+= 1.0 =
 * Release

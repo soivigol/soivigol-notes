@@ -4,7 +4,7 @@
  * Description:       Soivigol Notes provide you a block notes to annotations in the block editor that it don't show in the front end. Also provide a sidebard with a check list or work flow in each post with instructions to follow or step by step to write a post. This sidebar also has a editor rich text for additional annotations.
  * Requires at least: 6.1
  * Requires PHP:      7.0
- * Version:           1.0
+ * Version:           1.0.1
  * Plugin Uri:        https://sovigol.dev/plugin-soivigol-notes
  * Author:            David Viña
  * Author URI:        https://soivigol.dev
@@ -50,7 +50,6 @@ add_filter( 'plugin_action_links', 'soin_plugin_add_settings_link', 10, 2 );
  */
 function soin_notes_block_init() {
 	register_block_type( __DIR__ . '/build/notes' );
-	register_block_type( __DIR__ . '/build/flow' );
 
 	add_action( 'admin_footer', 'soin_nonce_in_blocks' );
 
@@ -75,6 +74,26 @@ function soin_notes_block_init() {
 	);
 }
 add_action( 'init', 'soin_notes_block_init', 8 );
+
+/**
+ * Enqueue scripts to work in the admin side.
+ */
+function soin_enqueue_scripts_check_list() {
+	wp_enqueue_script(
+		'soin-scripts-checklist',
+		plugin_dir_url( __FILE__ ) . 'build/flow/index.js',
+		array(),
+		'1.0.1',
+		true,
+	);
+	wp_enqueue_style(
+		'soin-styles-checklist',
+		plugin_dir_url( __FILE__ ) . 'build/flow/index.css',
+		false,
+		'1.0.1',
+	);
+}
+add_action( 'admin_enqueue_scripts', 'soin_enqueue_scripts_check_list' );
 
 /**
  * Add custom nonce in footer when bloks are register

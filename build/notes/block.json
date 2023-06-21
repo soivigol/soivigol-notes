@@ -5,7 +5,7 @@
   "version": "0.1.0",
   "title": "Soivigol Notes",
   "category": "soivigol-cats",
-  "description": "Example block scaffolded with Create Block tool.",
+  "description": "This block is a simple notes blocks that only appear in the backend.",
   "supports": {
     "html": false
   },

@@ -8,6 +8,8 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import CheckList from './check-list';
 
+import ContentLoader from 'react-content-loader'
+
 const WorkFlowAdmin = () => {
 	// Variables to editor to general data
 	const [ workFlow, setWorkFlow ] = useState('');
@@ -32,8 +34,8 @@ const WorkFlowAdmin = () => {
 		} ).then( ( res ) => {
 			if ( res.soivigol_checklist_array ) {
 				setItems( res.soivigol_checklist_array )
-				setLoading( true )
 			}
+			setLoading( true )
 			setWorkFlow( res.soivigol_workflow_text )
 			setAllowEditCheckbox( res.soivigol_allow_edit_checklist )
 			setShowEditorCheckbox( res.soivigol_show_quill_editor )
@@ -62,6 +64,10 @@ const WorkFlowAdmin = () => {
 		} )
 	}
 
+	const onChangeItems = ( value ) => {
+		setItems( value )
+	}
+
 	const onChangeCheckbox = ( e ) => {
 		if ( 'allow-edit-checklist' === e.target.name ) {
 			const currentAllow = allowEditCheckbox;
@@ -75,7 +81,7 @@ const WorkFlowAdmin = () => {
 		<>
 			<p className='text-big'>{ __( 'Checklist/Work Flow', 'soivigol-notes' ) }</p>
 			<p>{ __( 'Check list/Work flow created by default loaded in all sites. Once loaded, it\'s saved in each post with the content that it have in this moment.', 'soivigol-notes' ) }</p>
-			<CheckList items={ items } setItems={ setItems } loading={ loading }/>
+			<CheckList items={ items } setItems={ onChangeItems } loading={ loading }/>
 			<p className='text-big'>{ __( 'General notes', 'soivigol-notes' )}</p>
 			<p>{ __( 'General text that will be inserted in all Check List/Work Flows', 'soivigol-notes' ) }</p>
 			<ReactQuill theme="snow" value={workFlow} onChange={setWorkFlow} />
@@ -99,7 +105,33 @@ const WorkFlowAdmin = () => {
 					notice && ( <div class="notice notice-success"><p>{ __( 'Saved', 'soivigol-notes' ) }</p></div> )
 				)
 			}
+			{ ! loading && <ThreeDots/>}
 		</>
 	)
 }
 export { WorkFlowAdmin }
+
+const ThreeDots = props => (
+	<div className='cont-loader'>
+	<ContentLoader
+	  viewBox="0 0 400 400"
+	  height={400}
+	  width={400}
+	  backgroundColor="transparent"
+	  {...props}
+	>
+	  <circle cx="142" cy="86" r="16" />
+	  <circle cx="194" cy="86" r="16" />
+	  <circle cx="254" cy="86" r="16" />
+	</ContentLoader>
+	</div>
+  )
+
+  ThreeDots.metadata = {
+	name: 'RioF',
+	github: 'clariokids',
+	description: 'Three Dots',
+	filename: 'ThreeDots',
+  }
+
+  export default ThreeDots

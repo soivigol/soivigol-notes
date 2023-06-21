@@ -54,27 +54,23 @@ function soivigol_render_admin_html_workflow() {
  * Fuction that enqueue the scripts and estyles to general dashboard of the workflow.
  */
 function soivigol_add_styles_and_scripts_to_workflow() {
-	$current_screen = get_current_screen();
+	$dir = dirname( __DIR__ );
 
-	if ( 'settings_page_soivigol-workflow' === $current_screen->id ) {
-		$dir = dirname( __DIR__ );
+	$script_asset_path = "$dir/build/flow/index.asset.php";
 
-		$script_asset_path = "$dir/build/flow/index.asset.php";
+	$script_asset = require $script_asset_path;
 
-		$script_asset = require $script_asset_path;
+	wp_enqueue_script( 'soivigol-flow_app', plugin_dir_url( __DIR__ ) . 'build/flow/index.js', $script_asset['dependencies'], $script_asset['version'], false );
 
-		wp_enqueue_script( 'soivigol-flow_app', plugin_dir_url( __DIR__ ) . 'build/flow/index.js', $script_asset['dependencies'], $script_asset['version'], false );
+	wp_enqueue_style( 'soivigol-flow-css_app', plugin_dir_url( __DIR__ ) . 'build/flow/index.css', array(), SOIN_VERSION );
 
-		wp_enqueue_style( 'soivigol-flow-css_app', plugin_dir_url( __DIR__ ) . 'build/flow/index.css', array(), SOIVIGOL_VERSION );
-
-		wp_localize_script(
-			'soivigol-flow_app',
-			'backVariables',
-			array(
-				'nonce' => wp_create_nonce( 'wp_rest' ),
-			),
-		);
-	}
+	wp_localize_script(
+		'soivigol-flow_app',
+		'backVariables',
+		array(
+			'nonce' => wp_create_nonce( 'wp_rest' ),
+		),
+	);
 }
 add_action( 'admin_enqueue_scripts', 'soivigol_add_styles_and_scripts_to_workflow' );
 

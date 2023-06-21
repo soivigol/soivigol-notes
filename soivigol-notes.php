@@ -76,26 +76,6 @@ function soin_notes_block_init() {
 add_action( 'init', 'soin_notes_block_init', 8 );
 
 /**
- * Enqueue scripts to work in the admin side.
- */
-function soin_enqueue_scripts_check_list() {
-	wp_enqueue_script(
-		'soin-scripts-checklist',
-		plugin_dir_url( __FILE__ ) . 'build/flow/index.js',
-		array(),
-		'1.0.1',
-		true,
-	);
-	wp_enqueue_style(
-		'soin-styles-checklist',
-		plugin_dir_url( __FILE__ ) . 'build/flow/index.css',
-		false,
-		'1.0.1',
-	);
-}
-add_action( 'admin_enqueue_scripts', 'soin_enqueue_scripts_check_list' );
-
-/**
  * Add custom nonce in footer when bloks are register
  */
 function soin_nonce_in_blocks() {

@@ -50,6 +50,7 @@ add_filter( 'plugin_action_links', 'soin_plugin_add_settings_link', 10, 2 );
  */
 function soin_notes_block_init() {
 	register_block_type( __DIR__ . '/build/notes' );
+	register_block_type( __DIR__ . '/build/flow' );
 
 	add_action( 'admin_footer', 'soin_nonce_in_blocks' );
 

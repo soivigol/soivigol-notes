@@ -29,7 +29,7 @@ const WorkFlowAdmin = () => {
 		apiFetch.use( apiFetch.createNonceMiddleware( window.backVariables.nonce ) );
 		// Get posts data to this category
 		apiFetch( {
-			path: '/soivigol/v2/get-workflow-options',
+			path: '/soivigol/v2/get-workflow-options/?t=' + new Date().getTime(),
 			method: 'GET',
 		} ).then( ( res ) => {
 			if ( res.soivigol_checklist_array ) {

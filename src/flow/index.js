@@ -7,9 +7,6 @@ import { __ } from '@wordpress/i18n';
  * WordPress dependencies
  */
 import { registerPlugin } from '@wordpress/plugins';
-import {
-   subscribe
-} from '@wordpress/data';
 
 import { WorkFlowElement } from './work-flow-element';
 
@@ -22,60 +19,69 @@ import { WorkFlowAdmin } from './work-flow-admin';
 */
 function WorkFlow() {
 
-	   const renderButton = ( selector ) => {
-			const toolbarButton = document.createElement( 'div' );
-			toolbarButton.classList.add( 'soivigol-work-flow' );
-			selector.insertAdjacentElement( 'beforeend', toolbarButton );
+	/**
+	 * Checks for the presence of an element in the document using the specified selector.
+	 * @param {string} selector - The CSS selector to search for the element.
+	 * @returns {Promise<Element>} - A promise that resolves with the first element matching the selector.
+	 */
+	const checkElement = async selector => {
+		while ( document.querySelector(selector) === null) {
+			await new Promise( resolve => requestAnimationFrame( resolve ) )
+		}
+		return document.querySelector(selector);
+	}
 
-		   	const btnOpenFlow = document.createElement( 'button' )
-			btnOpenFlow.classList.add( 'components-button' )
-			btnOpenFlow.classList.add( 'has-icon' )
-			btnOpenFlow.classList.add( 'soivigol-work' )
-			btnOpenFlow.setAttribute( 'aria-label', __( 'Work Flow/Checklist', 'soivigol-notes' ) )
-			btnOpenFlow.title = __( 'Work Flow/Checklist', 'soivigol-notes' )
-			btnOpenFlow.innerHTML = `<span class="dashicons dashicons-editor-ul"></span>`;
+	/**
+	 * Renders a button element and appends it to the specified selector.
+	 *
+	 * @param {Element} selector - The element to which the button will be appended.
+	 */
+	const renderButton = ( selector ) => {
+		const toolbarButton = document.createElement( 'div' );
+		toolbarButton.classList.add( 'soivigol-work-flow' );
+		selector.insertAdjacentElement( 'beforeend', toolbarButton );
 
-			const container = document.querySelector( '.soivigol-work-flow' )
-			container.insertAdjacentElement( 'beforeend', btnOpenFlow )
-	   }
+		const btnOpenFlow = document.createElement( 'button' )
+		btnOpenFlow.classList.add( 'components-button' )
+		btnOpenFlow.classList.add( 'has-icon' )
+		btnOpenFlow.classList.add( 'soivigol-work' )
+		btnOpenFlow.setAttribute( 'aria-label', __( 'Work Flow/Checklist', 'soivigol-notes' ) )
+		btnOpenFlow.title = __( 'Work Flow/Checklist', 'soivigol-notes' )
+		btnOpenFlow.innerHTML = `<span class="dashicons dashicons-editor-ul"></span>`;
 
-	   const renderWorkFlow = ( selector ) => {
-			const flow = document.createElement( 'div' )
-			flow.classList.add( 'container-work-flow' )
-			selector.insertAdjacentElement( 'beforeend', flow )
-	   }
+		const container = document.querySelector( '.soivigol-work-flow' )
+		container.insertAdjacentElement( 'beforeend', btnOpenFlow )
+	}
 
-	  	const hasEventListener = (element, eventType) => {
-			return typeof element[`on${eventType}`] === 'function';
-		};
+	/**
+	 * Renders a work flow container element and appends it to the specified selector.
+	 * @param {Element} selector - The element to which the work flow container will be appended.
+	 */
+	const renderWorkFlow = ( selector ) => {
+		const flow = document.createElement( 'div' )
+		flow.classList.add( 'container-work-flow' )
+		selector.insertAdjacentElement( 'beforeend', flow )
+	}
 
-	   	subscribe( () => {
-			const editToolbar = document.querySelector( '.edit-post-header-toolbar' )
-			if ( ! editToolbar ) {
-				return
+	// Check if the element exists
+	checkElement( '.edit-post-header__center' ).then( ( el ) => {
+		if ( ! document.querySelector( '.soivigol-work-flow' ) ) {
+			renderButton( el );
+		}
+	} );
+
+	// Check if the element exists
+	checkElement( '.interface-interface-skeleton__body' ).then( ( el ) => {
+		if ( ! document.querySelector( '.container-work-flow' ) ) {
+			renderWorkFlow( el );
+			const containerWorkFlow = document.querySelector('.container-work-flow');
+			if (containerWorkFlow) {
+				ReactDOM.render(<WorkFlowElement />, containerWorkFlow);
 			}
-			if ( ! document.querySelector( '.soivigol-work-flow' ) ) {
-				renderButton( editToolbar );
-			}
-		} );
+		}
+	} );
 
-		subscribe( () => {
-			const bodyEditor = document.querySelector( '.interface-interface-skeleton__body' )
-			if ( ! bodyEditor ) {
-				return
-			}
-			if ( ! document.querySelector( '.container-work-flow' ) ) {
-				renderWorkFlow( bodyEditor );
-				const containerWorkFlow = document.querySelector( '.container-work-flow' );
-				if ( containerWorkFlow ) {
-					ReactDOM.render(
-						<WorkFlowElement/>,
-						containerWorkFlow
-					)
-				}
-			}
-		} );
-	   return null;
+	return null;
 }
 
 registerPlugin( 'soivigol-work-flow', {

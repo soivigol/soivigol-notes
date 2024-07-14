@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import SortableList, { SortableItem, SortableKnob } from 'react-easy-sort';
-import arrayMoveMutable from 'array-move';
+import { arrayMoveMutable } from 'array-move';
 
 import { __ } from '@wordpress/i18n';
 
